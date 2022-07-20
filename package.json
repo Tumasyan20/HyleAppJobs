@@ -1,0 +1,27 @@
+{
+  "name": "hyleappjobs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "tsc-watch -p ./tsconfig.json --onSuccess \"node ./dist/app.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "googleapis": "^105.0.0",
+    "mysql2": "^2.3.3",
+    "node-cron": "^3.0.1",
+    "typescript": "^4.7.4",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.5",
+    "source-map-support": "^0.5.21",
+    "tsc-watch": "^5.0.3"
+  }
+}
