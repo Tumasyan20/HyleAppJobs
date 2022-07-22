@@ -11,7 +11,7 @@ import {IDataForNotification} from "../interfaces/IDataForNotification.interface
 class JobsController {
   startSchedule() {
 
-    cron.schedule('46 15 * * *', () => {
+    cron.schedule('0 12 * * *', () => {
       this.sendNotificationsForTasks();
       this.sendNotificationsForHabits();
     })
