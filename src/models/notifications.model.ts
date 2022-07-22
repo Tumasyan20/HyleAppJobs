@@ -7,24 +7,16 @@ import {IUserToken} from "../interfaces/IUserToken.interface";
 
 class NotificationsModel {
   sendPushToUsers = async (notificationsData: Array<IDataForNotification>): Promise<void> => {
+    console.log({notificationsData})
     const [rows] = await mysql.client.query("CALL getUsersFirebaseTokens(?)", [
       notificationsData.map(data => {
         return data.userId
       }).join(',')
     ]);
 
-    const userTokens: Array<IUserToken> = rows[0]
+    const userTokens: Array<IUserToken> = rows[0];
 
-    // for (const data of userTokens) {
-    //   for(const user in notificationsData) {
-    //     if(notificationsData[user].userId === data.userId) {
-    //       notificationsData[user].token = data.token;
-    //     }
-    //   }
-    // }
-
-    console.log("formatted data -> ", notificationsData)
-
+    console.log("tokens -> ", userTokens)
 
     if (userTokens.length) {
       googleJwtClient.authorize(async (error, tokens) => {
@@ -35,7 +27,6 @@ class NotificationsModel {
         } else {
           const accessToken = tokens.access_token;
 
-          console.log("access token -> ", accessToken)
 
           for (const data of notificationsData) {
             try {
@@ -43,6 +34,7 @@ class NotificationsModel {
                 title: data.name,
                 body: data.description
               }
+              console.log("Data -> ", notification)
               const tokenData = userTokens.find(token => {return token.userId = data.userId})
               await axios.post(
                   'https://fcm.googleapis.com/v1/projects/'+ firebaseServiceAccount.project_id +'/messages:send',
@@ -71,7 +63,6 @@ class NotificationsModel {
   }
 
   addNotificationsToUsers = async(notificationData: Array<IDataForNotification>): Promise<void> => {
-    console.log(JSON.stringify(notificationData))
     await mysql.client.query("CALL addNotificationsToUsers(?)", [
       JSON.stringify(notificationData)
     ])
